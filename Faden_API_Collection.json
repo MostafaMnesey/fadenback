@@ -1,0 +1,1392 @@
+{
+  "info": {
+    "_postman_id": "faden-api-complete-collection-v2",
+    "name": "FADEN Backend API - Complete Collection",
+    "description": "Comprehensive Postman collection for FADEN Contracting Backend APIs (Public Website & Admin Dashboard) built with Node.js, Express, Prisma, and PostgreSQL.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3011/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - Authentication",
+      "item": [
+        {
+          "name": "Login (Public)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.collectionVariables.set('token', jsonData.data.token);",
+                  "    console.log('Token saved to collection variable: token');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@fadensa.com\",\n  \"password\": \"faden2026\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Authenticates the admin and returns a JWT token. The test script automatically saves the token to the `token` collection variable."
+          }
+        },
+        {
+          "name": "Get Me (Admin Auth Check)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "auth", "me"]
+            },
+            "description": "Validates the current admin Bearer token and returns authenticated user info."
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Gallery",
+      "item": [
+        {
+          "name": "Public - Get All Gallery Images",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/gallery",
+              "host": ["{{baseUrl}}"],
+              "path": ["gallery"]
+            }
+          }
+        },
+        {
+          "name": "Public - Get Gallery Meta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/gallery/meta",
+              "host": ["{{baseUrl}}"],
+              "path": ["gallery", "meta"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Create Gallery Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"src\": \"/images/faden/gallery-3.webp\",\n  \"alt\": \"Excavation Earthworks Fleet\",\n  \"position\": \"center center\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/gallery",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "gallery"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Gallery Image",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"alt\": \"Updated Site Concrete Pouring Photo\",\n  \"position\": \"center top\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/gallery/gal_1",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "gallery", "gal_1"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Delete Gallery Image",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/gallery/gal_3",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "gallery", "gal_3"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Gallery Meta",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"intro\": {\n    \"eyebrow\": \"Visual Portfolio\",\n    \"subtitle\": \"Milestones of engineering innovation and machinery on ground.\"\n  },\n  \"itemsPerPage\": 12\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/gallery/meta",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "gallery", "meta"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - Projects",
+      "item": [
+        {
+          "name": "Public - Get All Projects",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["projects"]
+            }
+          }
+        },
+        {
+          "name": "Public - Get Project By Slug",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/projects/by-slug/riyadh-financial-tower",
+              "host": ["{{baseUrl}}"],
+              "path": ["projects", "by-slug", "riyadh-financial-tower"]
+            }
+          }
+        },
+        {
+          "name": "Public - Get Project Categories (Live Count)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/projects/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["projects", "categories"]
+            }
+          }
+        },
+        {
+          "name": "Public - Get Projects Meta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/projects/meta",
+              "host": ["{{baseUrl}}"],
+              "path": ["projects", "meta"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Create Project",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Jeddah Logistics Complex\",\n  \"slug\": \"jeddah-logistics-complex\",\n  \"img\": \"/images/faden/project-3.webp\",\n  \"status\": \"In Progress\",\n  \"partnershipType\": \"Faden Only\",\n  \"order\": 3,\n  \"client\": \"Saudi Ports Authority\",\n  \"location\": \"Jeddah Islamic Port, Saudi Arabia\",\n  \"country\": \"Saudi Arabia\",\n  \"service\": {\n    \"id\": \"srv_general_contracting\",\n    \"name\": \"General Contracting\",\n    \"slug\": \"general-contracting\"\n  },\n  \"createdAt\": \"2026-01-10T00:00:00.000Z\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "projects"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Project (Top-Level)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Riyadh Financial Tower Phase 1\",\n  \"status\": \"Finished\",\n  \"location\": \"King Fahd Road, Riyadh, Saudi Arabia\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/projects/prj_riyadh_tower",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "projects", "prj_riyadh_tower"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Project Detail (Full CMS Content)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"overview\": {\n    \"label\": \"Project Overview\",\n    \"caption\": \"Commercial Landmark\",\n    \"paragraphs\": [\n      \"A state-of-the-art 35-story commercial skyscraper delivering modern architectural aesthetics with high-efficiency floor layouts.\",\n      \"Constructed to meet LEED Gold sustainability specifications.\"\n    ]\n  },\n  \"infoTabs\": {\n    \"details\": {\n      \"left\": [\n        { \"label\": \"Client\", \"value\": \"Ministry of Housing\" },\n        { \"label\": \"Location\", \"value\": \"Riyadh, KSA\" },\n        { \"label\": \"Status\", \"value\": \"Finished\" }\n      ],\n      \"right\": [\n        { \"label\": \"Service\", \"value\": \"General Contracting\" },\n        { \"label\": \"Partnership\", \"value\": \"Faden Only\" },\n        { \"label\": \"Country\", \"value\": \"Saudi Arabia\" }\n      ]\n    },\n    \"composition\": {\n      \"left\": [\n        { \"label\": \"Built-up Area\", \"value\": \"45,000 sqm\" },\n        { \"label\": \"Floors\", \"value\": \"35 Commercial Levels\" }\n      ],\n      \"right\": [\n        { \"label\": \"Foundation Depth\", \"value\": \"18 meters\" },\n        { \"label\": \"Structural Steel\", \"value\": \"4,500 Tons\" }\n      ]\n    }\n  },\n  \"designIntent\": {\n    \"label\": \"Design & Engineering Intent\",\n    \"caption\": \"Architectural Innovation\",\n    \"paragraphs\": [\n      \"Engineered with reinforced concrete core coupled with post-tensioned floor slabs for wide column-free office spaces.\"\n    ],\n    \"image\": \"/images/faden/project-1.webp\"\n  },\n  \"amenitiesFeatures\": {\n    \"label\": \"Key Features & Specs\",\n    \"caption\": \"Advanced MEP & Systems\",\n    \"items\": [\n      \"LEED Gold Certified Efficiency\",\n      \"High-speed smart elevator system\",\n      \"Integrated Building Management System (BMS)\"\n    ]\n  },\n  \"keyAchievements\": {\n    \"label\": \"Milestones & Safety\",\n    \"caption\": \"Delivery Metrics\",\n    \"items\": [\n      \"Delivered 2 months ahead of schedule\",\n      \"Zero Lost Time Injuries (LTI) over 2.5 million man-hours\"\n    ]\n  },\n  \"photos\": [\n    \"/images/faden/project-1.webp\",\n    \"/images/faden/gallery-1.webp\"\n  ],\n  \"photosCaption\": \"Site progress and final elevation view\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/projects/prj_riyadh_tower/detail",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "projects", "prj_riyadh_tower", "detail"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Reorder Projects",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderedIds\": [\n    \"prj_southern_highway\",\n    \"prj_riyadh_tower\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/projects/reorder",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "projects", "reorder"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Projects Meta",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"banner\": {\n    \"title\": \"Flagship Developments & Mega Projects\",\n    \"subtitle\": \"Transforming urban landscapes through construction excellence.\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/projects/meta",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "projects", "meta"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Delete Project",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/projects/prj_temp",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "projects", "prj_temp"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Services",
+      "item": [
+        {
+          "name": "Public - Get All Services",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["services"]
+            }
+          }
+        },
+        {
+          "name": "Public - Get Service By Slug (Shared Why-Choose Resolved)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/services/by-slug/general-contracting",
+              "host": ["{{baseUrl}}"],
+              "path": ["services", "by-slug", "general-contracting"]
+            }
+          }
+        },
+        {
+          "name": "Public - Get Why Choose FADEN Singleton",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/services/why-choose-faden",
+              "host": ["{{baseUrl}}"],
+              "path": ["services", "why-choose-faden"]
+            }
+          }
+        },
+        {
+          "name": "Public - Get Services Meta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/services/meta",
+              "host": ["{{baseUrl}}"],
+              "path": ["services", "meta"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Create Service",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Industrial & MEP Works\",\n  \"slug\": \"industrial-mep-works\",\n  \"description\": \"Electro-mechanical installations, power distribution, HVAC, and industrial piping.\",\n  \"img\": \"/images/faden/service-3.webp\",\n  \"order\": 3,\n  \"bannerImage\": \"/images/faden/service-banner-3.webp\",\n  \"bannerSubtitle\": \"Engineered Precision\",\n  \"ctaTitle\": \"Require MEP Contracting?\",\n  \"ctaSubtitle\": \"Talk to our engineering team for integrated solutions.\",\n  \"sections\": [\n    {\n      \"id\": \"sec-mep-1\",\n      \"type\": \"OVERVIEW\",\n      \"title\": \"Industrial MEP Capabilities\",\n      \"subtitle\": \"HVAC & Power distribution\",\n      \"content\": {\n        \"paragraphs\": [\n          \"Delivering robust mechanical, electrical, and plumbing works for complex facilities.\"\n        ]\n      },\n      \"img\": \"/images/faden/service-overview-3.webp\",\n      \"order\": 1\n    },\n    {\n      \"id\": \"why-choose\",\n      \"type\": \"SHARED_WHY_CHOOSE\",\n      \"order\": 2\n    }\n  ],\n  \"projects\": []\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "services"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Service (Top-Level)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Comprehensive turnkey general contracting solutions across Saudi Arabia.\",\n  \"bannerSubtitle\": \"Delivering Excellence with Vision 2030\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/services/srv_general_contracting",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "services", "srv_general_contracting"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Service Sections",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"id\": \"sec-1\",\n    \"type\": \"OVERVIEW\",\n    \"title\": \"Full-Cycle Construction Services\",\n    \"subtitle\": \"From ground-breaking to turnkey handover\",\n    \"content\": {\n      \"paragraphs\": [\n        \"FADEN delivers general contracting services managing all civil, structural, and finishing phases with zero compromise on safety.\"\n      ]\n    },\n    \"img\": \"/images/faden/service-overview-1.webp\",\n    \"order\": 1\n  },\n  {\n    \"id\": \"sec-proc\",\n    \"type\": \"PROCESS\",\n    \"title\": \"Our Project Execution Methodology\",\n    \"subtitle\": \"Rigorous quality lifecycle\",\n    \"content\": {\n      \"steps\": [\n        \"1. Mobilization & Site Survey\",\n        \"2. Foundational & Structural Works\",\n        \"3. MEP Integration & Finishing\",\n        \"4. Testing, Commissioning & Handover\"\n      ]\n    },\n    \"order\": 2\n  },\n  {\n    \"id\": \"why-choose\",\n    \"type\": \"SHARED_WHY_CHOOSE\",\n    \"order\": 3\n  }\n]"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/services/general-contracting/sections",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "services", "general-contracting", "sections"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Service Key Projects",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"id\": \"kp-1\",\n    \"title\": \"Riyadh Financial Tower\",\n    \"subtitle\": \"Commercial Skyscraper\",\n    \"img\": \"/images/faden/project-1.webp\",\n    \"projectId\": \"prj_riyadh_tower\"\n  }\n]"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/services/general-contracting/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "services", "general-contracting", "projects"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Reorder Services",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderedIds\": [\n    \"srv_general_contracting\",\n    \"srv_infrastructure\"\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/services/reorder",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "services", "reorder"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Why Choose FADEN Singleton",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Why Choose FADEN\",\n  \"subtitle\": \"Delivering Excellence Across Saudi Arabia & Egypt\",\n  \"content\": {\n    \"items\": [\n      \"Proven Track Record in mega commercial and civil engineering projects.\",\n      \"Fully Owned Fleet of heavy construction machinery eliminating project bottlenecks.\",\n      \"Strict ISO Quality & Safety Compliance.\",\n      \"End-to-End Turnkey Contracting Capabilities.\",\n      \"Over 300+ Dedicated Engineers and Project Managers.\"\n    ]\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/services/why-choose-faden",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "services", "why-choose-faden"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Services Meta",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"banner\": {\n    \"title\": \"Comprehensive Contracting Solutions\",\n    \"subtitle\": \"End-to-end capabilities tailored to challenging construction environments.\"\n  },\n  \"sectors\": {\n    \"title\": \"Key Industry Sectors\",\n    \"subtitle\": \"Commercial, Infrastructure, Industrial, and Residential.\"\n  },\n  \"cta\": {\n    \"title\": \"Partner with FADEN Today\",\n    \"subtitle\": \"Contact our engineering advisory team to get started.\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/services/meta",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "services", "meta"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Delete Service",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/services/srv_temp",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "services", "srv_temp"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 - Equipment",
+      "item": [
+        {
+          "name": "Public - Get All Equipment",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/equipment",
+              "host": ["{{baseUrl}}"],
+              "path": ["equipment"]
+            }
+          }
+        },
+        {
+          "name": "Public - Get Equipment Meta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/equipment/meta",
+              "host": ["{{baseUrl}}"],
+              "path": ["equipment", "meta"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Create Equipment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Komatsu D375A Bulldozer\",\n  \"count\": 6,\n  \"image\": \"/images/faden/equipment-3.webp\",\n  \"rotate\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/equipment",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "equipment"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Equipment",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"count\": 16,\n  \"rotate\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/equipment/eq_1",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "equipment", "eq_1"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Equipment Meta",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"intro\": {\n    \"eyebrow\": \"Fleet Readiness\",\n    \"subtitle\": \"Heavy Earthmoving & Construction Equipment Fleet\",\n    \"description\": \"Maintained to international safety and readiness benchmarks.\"\n  },\n  \"heavy\": {\n    \"eyebrow\": \"Heavy Machinery Fleet\",\n    \"subtitle\": \"Excavators, Tower Cranes, Bulldozers, and Graders\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/equipment/meta",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "equipment", "meta"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Delete Equipment",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/equipment/eq_temp",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "equipment", "eq_temp"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 - Clients",
+      "item": [
+        {
+          "name": "Public - Get All Clients",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/clients",
+              "host": ["{{baseUrl}}"],
+              "path": ["clients"]
+            }
+          }
+        },
+        {
+          "name": "Public - Get Clients Meta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/clients/meta",
+              "host": ["{{baseUrl}}"],
+              "path": ["clients", "meta"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Create Client",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"NEOM\",\n  \"logo\": \"/images/faden/client-3.webp\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/clients",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "clients"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Client",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Saudi Aramco Industrial\",\n  \"logo\": \"/images/faden/client-1-updated.webp\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/clients/cli_1",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "clients", "cli_1"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Clients Meta",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"banner\": {\n    \"title\": \"Trusted by Government & Industry Titans\",\n    \"subtitle\": \"Building lasting relationships through operational integrity.\",\n    \"image\": \"/images/faden/clients-banner.webp\"\n  },\n  \"intro\": {\n    \"eyebrow\": \"Client Relationships\",\n    \"title\": \"Leading Organizations That Partner with FADEN\",\n    \"description\": \"From sovereign entities to mega industrial corporations.\"\n  },\n  \"cta\": {\n    \"title\": \"Collaborate on Your Next Development\",\n    \"subtitle\": \"Reach out to explore how FADEN can deliver on your project goals.\",\n    \"image\": \"/images/faden/cta-clients.webp\",\n    \"primaryButton\": {\n      \"label\": \"Get in Touch\",\n      \"href\": \"/contact\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/clients/meta",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "clients", "meta"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Delete Client",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/clients/cli_temp",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "clients", "cli_temp"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 - Contact",
+      "item": [
+        {
+          "name": "Public - Submit Contact Form",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Khalid Al-Ghamdi\",\n  \"email\": \"khalid@example.com\",\n  \"phone\": \"+966551234567\",\n  \"subject\": \"Commercial Contracting RFP\",\n  \"message\": \"We would like to request an RFP and preliminary engineering consultation for a commercial tower in Riyadh.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/contact/submissions",
+              "host": ["{{baseUrl}}"],
+              "path": ["contact", "submissions"]
+            }
+          }
+        },
+        {
+          "name": "Public - Get Contact Page (With Dynamic Info Items)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/contact/page",
+              "host": ["{{baseUrl}}"],
+              "path": ["contact", "page"]
+            },
+            "description": "Returns Contact Page copy with `info.items` populated on-the-fly from `Settings.footer.contact`."
+          }
+        },
+        {
+          "name": "Dashboard - Get Contact Submissions (Inbox)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/contact/submissions",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "contact", "submissions"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Mark Submission As Read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/contact/submissions/sub_cRGS8ss2/read",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "contact", "submissions", "sub_cRGS8ss2", "read"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Delete Contact Submission",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/contact/submissions/sub_cRGS8ss2",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "contact", "submissions", "sub_cRGS8ss2"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Contact Page Copy",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"banner\": {\n    \"title\": \"Connect with Our Construction Specialists\",\n    \"subtitle\": \"Get in touch regarding your tenders, inquiries, or joint venture opportunities.\",\n    \"image\": \"/images/faden/contact-banner.webp\"\n  },\n  \"info\": {\n    \"title\": \"Corporate Headquarters\",\n    \"subtitle\": \"Direct channels to our executive and engineering teams.\"\n  },\n  \"form\": {\n    \"title\": \"Send an Inquiry\",\n    \"submitLabel\": \"Send Message\",\n    \"successMessage\": \"Your message has been received. Our team will follow up within 24 hours.\",\n    \"errorMessage\": \"Unable to send your message. Please verify your fields and try again.\"\n  },\n  \"map\": {\n    \"eyebrow\": \"Our Location\",\n    \"subtitle\": \"Riyadh Headquarters, Kingdom of Saudi Arabia\",\n    \"embedUrl\": \"https://maps.google.com\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/contact/page",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "contact", "page"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 - Site Settings",
+      "item": [
+        {
+          "name": "Public - Get Site Settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["settings"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Site Settings (Deep-Merge)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"socialLinks\": [\n    {\n      \"label\": \"LinkedIn\",\n      \"icon\": \"linkedin\",\n      \"href\": \"https://linkedin.com/company/faden-contracting\"\n    },\n    {\n      \"label\": \"Twitter / X\",\n      \"icon\": \"twitter\",\n      \"href\": \"https://x.com/fadensa\"\n    },\n    {\n      \"label\": \"Instagram\",\n      \"icon\": \"instagram\",\n      \"href\": \"https://instagram.com/fadensa\"\n    }\n  ],\n  \"footer\": {\n    \"contact\": {\n      \"address\": \"King Abdulaziz Road, Riyadh 12345, Kingdom of Saudi Arabia\",\n      \"phone\": \"+966 11 234 5678\",\n      \"email\": \"info@fadensa.com\"\n    },\n    \"copyrightText\": \"© 2026 FADEN Contracting Co. All rights reserved.\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "settings"]
+            },
+            "description": "Deep-merges provided sections (e.g. socialLinks or footer) with existing settings without wiping out branding or SEO."
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 - About Pages",
+      "item": [
+        {
+          "name": "Public - Get About Overview",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/about/overview",
+              "host": ["{{baseUrl}}"],
+              "path": ["about", "overview"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update About Overview",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"banner\": {\n    \"title\": \"About FADEN Contracting Co.\",\n    \"subtitle\": \"Building foundations of sustainable progress.\",\n    \"backgroundImage\": \"/images/faden/about-overview-banner.webp\"\n  },\n  \"intro\": {\n    \"eyebrow\": \"Company Overview\",\n    \"lead\": \"A leading general contractor aligned with Saudi Vision 2030.\",\n    \"paragraphs\": [\n      \"FADEN delivers general contracting, civil earthworks, and complex infrastructure developments.\",\n      \"With self-sufficient heavy machinery fleets and proven engineering leaders, we complete projects on schedule.\"\n    ],\n    \"quote\": \"Excellence in construction through discipline, safety, and modern engineering.\"\n  },\n  \"stats\": [\n    { \"icon\": \"shield-check\", \"value\": \"100%\", \"description\": \"Safety & Quality Compliance\" },\n    { \"icon\": \"wrench\", \"value\": \"50+\", \"description\": \"Owned Heavy Machinery Assets\" },\n    { \"icon\": \"users\", \"value\": \"300+\", \"description\": \"Engineers & Field Specialists\" },\n    { \"icon\": \"globe\", \"value\": \"2\", \"description\": \"Countries (Saudi Arabia & Egypt)\" }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/about/overview",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "about", "overview"]
+            }
+          }
+        },
+        {
+          "name": "Public - Get About Vision & Mission",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/about/vision-mission",
+              "host": ["{{baseUrl}}"],
+              "path": ["about", "vision-mission"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update About Vision & Mission",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"banner\": {\n    \"title\": \"Vision, Mission & Core Values\",\n    \"subtitle\": \"Strategic principles guiding every engineering endeavor.\",\n    \"backgroundImage\": \"/images/faden/about-vision-banner.webp\"\n  },\n  \"drivers\": {\n    \"eyebrow\": \"Strategic Drivers\",\n    \"subtitle\": \"Principles for Long-Term Value\",\n    \"primary\": [\n      {\n        \"title\": \"Our Vision\",\n        \"description\": \"To lead the contracting sector in Saudi Arabia and the Middle East through reliability and innovation.\"\n      },\n      {\n        \"title\": \"Our Mission\",\n        \"description\": \"To construct landmarks that empower community and industrial growth safely and sustainably.\"\n      }\n    ],\n    \"secondary\": [\n      { \"title\": \"Safety First\", \"description\": \"Zero compromise on workforce and site safety.\"\n      },\n      { \"title\": \"Accountability\", \"description\": \"Transparent project delivery and milestone tracking.\"\n      },\n      { \"title\": \"Engineering Rigor\", \"description\": \"Precision in every foundation and structure.\"\n      }\n    ]\n  },\n  \"different\": {\n    \"eyebrow\": \"The FADEN Edge\",\n    \"subtitle\": \"What Sets Us Apart\",\n    \"image\": \"/images/faden/about-different.webp\",\n    \"imageAlt\": \"FADEN Advantage\",\n    \"items\": [\n      { \"title\": \"Full Fleet Autonomy\", \"content\": \"Zero reliance on third-party machinery availability.\" },\n      { \"title\": \"Turnkey Execution\", \"content\": \"Civil, MEP, earthmoving, and finishing under one roof.\" }\n    ]\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/about/vision-mission",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "about", "vision-mission"]
+            }
+          }
+        },
+        {
+          "name": "Public - Get About Leadership",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/about/leadership",
+              "host": ["{{baseUrl}}"],
+              "path": ["about", "leadership"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update About Leadership",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"banner\": {\n    \"title\": \"Executive Leadership Messages\",\n    \"subtitle\": \"Guiding our growth and commitment to client success.\",\n    \"backgroundImage\": \"/images/faden/about-leadership-banner.webp\"\n  },\n  \"messages\": [\n    {\n      \"name\": \"Board of Directors\",\n      \"eyebrow\": \"Executive Stewardship\",\n      \"subtitle\": \"Chairman's Message\",\n      \"image\": \"/images/faden/chairman.webp\",\n      \"description\": \"From ground excavation to soaring towers, FADEN continues to build with pride and precision across the Kingdom.\"\n    }\n  ],\n  \"subsidiaries\": {\n    \"eyebrow\": \"Our Group Capabilities\",\n    \"subtitle\": \"Specialized divisions supporting integrated contracting\",\n    \"logos\": []\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/about/leadership",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "about", "leadership"]
+            }
+          }
+        },
+        {
+          "name": "Public - Get About Partners",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/about/partners",
+              "host": ["{{baseUrl}}"],
+              "path": ["about", "partners"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update About Partners",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"banner\": {\n    \"title\": \"Strategic Partnerships & Alliances\",\n    \"subtitle\": \"Synergistic collaboration delivering mega industrial projects.\",\n    \"backgroundImage\": \"/images/faden/about-partners-banner.webp\"\n  },\n  \"intro\": {\n    \"eyebrow\": \"Global Energy Alliance\",\n    \"subtitle\": \"Stronger Together\",\n    \"logo\": \"/images/faden/partner-global-energy.webp\",\n    \"logoAlt\": \"Global Energy Logo\",\n    \"badge\": \"Joint Venture\",\n    \"title\": \"Strategic Alliance with Global Energy\",\n    \"description\": \"Expanding heavy contracting, plant construction, and energy infrastructure capabilities.\",\n    \"bullets\": [\n      \"Turnkey EPC Execution\",\n      \"Shared Fleet and Heavy Machinery Logistics\",\n      \"Cross-Border Engineering Excellence\"\n    ]\n  },\n  \"achievements\": {\n    \"eyebrow\": \"Milestones\",\n    \"subtitle\": \"Alliance Delivery Highlights\",\n    \"items\": [\n      { \"icon\": \"shield-check\", \"title\": \"Industrial Works\", \"description\": \"Multiple major industrial plants delivered safely.\"\n      }\n    ]\n  },\n  \"projects\": {\n    \"eyebrow\": \"Joint Portfolio\",\n    \"subtitle\": \"Delivered in partnership with Global Energy\",\n    \"items\": []\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/about/partners",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "about", "partners"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 - Home Features",
+      "item": [
+        {
+          "name": "Public - Get Home Features",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/home-features",
+              "host": ["{{baseUrl}}"],
+              "path": ["home-features"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Home Feature (Gallery Section)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ids\": [\"gal_1\", \"gal_2\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/home-features/gallery",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "home-features", "gallery"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Home Feature (Projects Section)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ids\": [\"prj_riyadh_tower\", \"prj_southern_highway\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/home-features/projects",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "home-features", "projects"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Home Feature (Services Section)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ids\": [\"srv_general_contracting\", \"srv_infrastructure\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/home-features/services",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "home-features", "services"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Home Feature (Clients Section)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ids\": [\"cli_1\", \"cli_2\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/home-features/clients",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "home-features", "clients"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Update Home Feature (Equipment Section)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ids\": [\"eq_1\", \"eq_2\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/home-features/equipment",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "home-features", "equipment"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "11 - Uploads",
+      "item": [
+        {
+          "name": "Public - Upload Media File",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/uploads",
+              "host": ["{{baseUrl}}"],
+              "path": ["uploads"]
+            }
+          }
+        },
+        {
+          "name": "Dashboard - Upload Media File",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/uploads",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "uploads"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

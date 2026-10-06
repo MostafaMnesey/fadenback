@@ -1,0 +1,249 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("users")
+}
+
+model GalleryImage {
+  id        String   @id @default(uuid())
+  src       String
+  alt       String
+  position  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("gallery_images")
+}
+
+model GalleryMeta {
+  id           String   @id @default("singleton")
+  intro        Json?
+  itemsPerPage Int      @default(12)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("gallery_meta")
+}
+
+model Project {
+  id              String   @id @default(uuid())
+  title           String
+  slug            String   @unique
+  img             String
+  status          String   // "Finished" | "In Progress"
+  partnershipType String   // "Faden Only" | "With Global Energy"
+  order           Int      @default(1)
+  client          String
+  location        String
+  country         String   // "Saudi Arabia" | "Egypt"
+  service         Json     // { id, name, slug }
+  detail          Json?    // embedded detail page
+  createdAt       DateTime @default(now()) // domain completion/display date
+  updatedAt       DateTime @updatedAt
+
+  @@map("projects")
+}
+
+model ProjectsMeta {
+  id        String   @id @default("singleton")
+  banner    Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("projects_meta")
+}
+
+model Service {
+  id                 String   @id @default(uuid())
+  name               String
+  slug               String   @unique
+  description        String
+  img                String
+  order              Int      @default(1)
+  bannerImage        String?
+  bannerSubtitle     String?
+  ctaTitle           String?
+  ctaSubtitle        String?
+  ctaBackgroundImage String?
+  sections           Json?    @default("[]")
+  projects           Json?    @default("[]")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("services")
+}
+
+model ServicesMeta {
+  id        String   @id @default("singleton")
+  banner    Json?
+  sectors   Json?
+  whyChoose Json?
+  cta       Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("services_meta")
+}
+
+model WhyChooseFaden {
+  id        String   @id @default("why-choose")
+  type      String   @default("BULLETS")
+  title     String   @default("Why Choose FADEN")
+  subtitle  String   @default("")
+  content   Json?    @default("{\"items\":[]}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("why_choose_faden")
+}
+
+model Equipment {
+  id        String   @id @default(uuid())
+  name      String
+  count     Int      @default(1)
+  image     String
+  rotate    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("equipment")
+}
+
+model EquipmentMeta {
+  id        String   @id @default("singleton")
+  intro     Json?
+  heavy     Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("equipment_meta")
+}
+
+model Client {
+  id        String   @id @default(uuid())
+  name      String
+  logo      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("clients")
+}
+
+model ClientsMeta {
+  id        String   @id @default("singleton")
+  banner    Json?
+  intro     Json?
+  cta       Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("clients_meta")
+}
+
+model ContactSubmission {
+  id        String   @id @default(uuid())
+  fullName  String
+  email     String
+  phone     String
+  subject   String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("contact_submissions")
+}
+
+model ContactPage {
+  id        String   @id @default("singleton")
+  banner    Json?
+  info      Json?
+  form      Json?
+  map       Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("contact_page")
+}
+
+model Settings {
+  id          String   @id @default("singleton")
+  branding    Json?
+  navigation  Json?
+  socialLinks Json?
+  footer      Json?
+  seo         Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("settings")
+}
+
+model AboutOverview {
+  id        String   @id @default("singleton")
+  banner    Json?
+  intro     Json?
+  stats     Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("about_overview")
+}
+
+model AboutVisionMission {
+  id        String   @id @default("singleton")
+  banner    Json?
+  drivers   Json?
+  different Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("about_vision_mission")
+}
+
+model AboutLeadership {
+  id           String   @id @default("singleton")
+  banner       Json?
+  messages     Json?
+  subsidiaries Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("about_leadership")
+}
+
+model AboutPartners {
+  id           String   @id @default("singleton")
+  banner       Json?
+  intro        Json?
+  achievements Json?
+  projects     Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("about_partners")
+}
+
+model HomeFeatures {
+  id        String   @id @default("singleton")
+  gallery   Json?    @default("[]")
+  projects  Json?    @default("[]")
+  services  Json?    @default("[]")
+  clients   Json?    @default("[]")
+  equipment Json?    @default("[]")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("home_features")
+}
